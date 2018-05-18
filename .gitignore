@@ -304,3 +304,4 @@ __pycache__/
 
 # Allow all SFML items...
 !SFML-2.4.2/*
+!SFML-2.4.2/*/*
