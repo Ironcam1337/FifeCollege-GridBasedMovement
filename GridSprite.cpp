@@ -36,7 +36,7 @@ void GridSprite::SetGridCoords(int _x, int _y)
 // Update the position of the sprite based on the grid
 void GridSprite::UpdateSprite()
 {
-	float x = m_gridX * m_grid->CELL_WIDTH;
-	float y = m_gridY * m_grid->CELL_HEIGHT;
+	float x = m_gridX * m_grid->CELL_WIDTH + m_grid->GetPosition().x;
+	float y = m_gridY * m_grid->CELL_HEIGHT + m_grid->GetPosition().y;
 	m_sprite.setPosition(x, y);
 }

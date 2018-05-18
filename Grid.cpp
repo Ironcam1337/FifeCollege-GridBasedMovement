@@ -48,13 +48,31 @@ bool Grid::input(const sf::Event& _event)
 	// We start out assuming we have not handled input
 
 	bool handledInput = false;
-	// Pass the Input down to the grid objects
+
+	// Clear received input flags from all grid objects
+	// This is used to make sure we never give input to the same object \
+	// multiple times per frame - needed if our objects move mid-frame.
 	for (int x = 0; x < GRID_SIZE_X; ++x)
 	{
 		for (int y = 0; y < GRID_SIZE_Y; ++y)
 		{
 			// We check for nullptr in case there is nothing in this grid slot!
 			if (m_GridArray[x][y] != nullptr)
+			{
+				m_GridArray[x][y]->ClearReceivedInput();
+			}
+		}
+	}
+
+	// Pass the Input down to the grid objects
+	for (int x = 0; x < GRID_SIZE_X; ++x)
+	{
+		for (int y = 0; y < GRID_SIZE_Y; ++y)
+		{
+			// We check for nullptr in case there is nothing in this grid slot!
+			// We also check that this object hasn't already received input on this frame
+			// this is needed for objects that move around the grid during the input phase
+			if (m_GridArray[x][y] != nullptr && !m_GridArray[x][y]->HasRececeivedInput())
 			{
 				// We set out handledInput to true IF we handled any input 
 				// just now OR if we handled input previously.
@@ -143,6 +161,14 @@ void Grid::SetObject(int _x, int _y, GridObject* _object, bool _deleteExisting /
 			}
 		}
 		m_GridArray[_x][_y] = _object;
+		if (_object != nullptr)
+		{
+			// Important: We need to also tell this object
+			// where it currently is in the grid
+			// so it can draw it's sprites in the right place.
+			_object->SetGrid(this);
+			_object->SetGridCoords(_x, _y);
+		}
 	}
 	else
 	{
@@ -156,14 +182,19 @@ void Grid::MoveObject(int _xOrigin, int _yOrigin,
 	int _xNew, int _yNew,
 	bool _deleteExisting /*= true*/)
 {
-	// Get the object we will be moving
-	GridObject* toMove = GetOjbect(_xOrigin, _yOrigin);
+	// Check that the coordinates are valid
+	if (_xNew >= 0 && _xNew < GRID_SIZE_X
+		&& _yNew >= 0 && _yNew < GRID_SIZE_Y)
+	{
+		// Get the object we will be moving
+		GridObject* toMove = GetOjbect(_xOrigin, _yOrigin);
 
-	// Remove it from its initial slot
-	SetObject(_xOrigin, _yOrigin, nullptr);
+		// Remove it from its initial slot
+		SetObject(_xOrigin, _yOrigin, nullptr);
 
-	// Set it in its new slot
-	// By default this will delete anything in that
-	// slot already
-	SetObject(_xNew, _yNew, toMove, _deleteExisting);
+		// Set it in its new slot
+		// By default this will delete anything in that
+		// slot already
+		SetObject(_xNew, _yNew, toMove, _deleteExisting);
+	}
 }

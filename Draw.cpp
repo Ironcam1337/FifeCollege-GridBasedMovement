@@ -6,7 +6,7 @@ using namespace sf;
 void Engine::draw()
 {
 	// Rub out the last frame
-	m_Window.clear(Color::White);
+	m_Window.clear(Color::Black);
 
 	// switch to main view
 	m_Window.setView(m_MainView);

@@ -35,6 +35,8 @@ public:
 	void MoveObject(int _xOrigin, int _yOrigin,
 		int _xNew, int _yNew,
 		bool _deleteExisting = true);
+	sf::Vector2f GetPosition() { return m_GridPosition; }
+	void SetPosition(sf::Vector2f _newPos) { m_GridPosition = _newPos; }
 
 	// Const grid data members can be public
 	const int GRID_SIZE_X;
@@ -46,4 +48,5 @@ private:
 
 	// 2 Dimmensional array to pointers to GridObjects
 	GridObject*** m_GridArray;
+	sf::Vector2f m_GridPosition;
 };
