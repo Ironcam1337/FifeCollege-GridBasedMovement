@@ -301,3 +301,6 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+# Allow all SFML items...
+!SFML-2.4.2/*
